@@ -14,53 +14,76 @@ echo -e "Te enfrentarás a desafíos y deberás responder preguntas para avanzar
 # Variables del juego
 cristales=0
 
-# Primera pregunta
-echo -e "${BLUE}Primera pregunta: ¿Cuál es el componente principal de una poción de curación?${NC}"
-echo "1) Mandrágora"
-echo "2) Polvo de hadas"
-echo "3) Agua de manantial"
-read -p "Elige una opción (1, 2, 3): " respuesta1
+# Dibujos en ASCII
+baston_magico="
+      /\\
+     /  \\
+    /    \\
+   /______\\
+   |      |
+   |      |
+   |      |
+"
 
-if [ "$respuesta1" == "3" ]; then
-    echo -e "${GREEN}Correcto! Has encontrado el primer cristal mágico.${NC}"
-    ((cristales++))
-else
-    echo -e "${RED}Incorrecto. Sigue buscando...${NC}"
-fi
+cristal="
+     *
+    ***
+   *****
+    ***
+     *
+"
 
-# Segunda pregunta
-echo -e "\n${BLUE}Segunda pregunta: ¿Cuál es el hechizo para encender una luz?${NC}"
-echo "1) Lumos"
-echo "2) Nox"
-echo "3) Incendio"
-read -p "Elige una opción (1, 2, 3): " respuesta2
+# Función para hacer preguntas
+hacer_pregunta() {
+    pregunta=$1
+    opciones=$2
+    respuesta_correcta=$3
 
-if [ "$respuesta2" == "1" ]; then
-    echo -e "${GREEN}Correcto! Has encontrado el segundo cristal mágico.${NC}"
-    ((cristales++))
-else
-    echo -e "${RED}Incorrecto. Sigue buscando...${NC}"
-fi
+    echo -e "${BLUE}$pregunta${NC}"
+    echo -e "$opciones"
+    read -p "Elige una opción (1, 2, 3): " respuesta
 
-# Tercera pregunta
-echo -e "\n${BLUE}Tercera pregunta: ¿Cómo se llama la flor que solo florece a la luz de la luna llena?${NC}"
-echo "1) Flor de Luna"
-echo "2) Flor de Sol"
-echo "3) Flor de Estrella"
-read -p "Elige una opción (1, 2, 3): " respuesta3
+    if [ "$respuesta" == "$respuesta_correcta" ]; then
+        echo -e "${GREEN}Correcto! Has encontrado un cristal mágico.${NC}"
+        ((cristales++))
+        echo -e "$cristal\n"
+    else
+        echo -e "${RED}Incorrecto. Sigue buscando...${NC}"
+    fi
+}
 
-if [ "$respuesta3" == "1" ]; then
-    echo -e "${GREEN}Correcto! Has encontrado el tercer cristal mágico.${NC}"
-    ((cristales++))
-else
-    echo -e "${RED}Incorrecto. Sigue buscando...${NC}"
-fi
+# Preguntas del juego
+preguntas=(
+    "¿Cuál es el componente principal de una poción de curación?"
+    "¿Cuál es el hechizo para encender una luz?"
+    "¿Cómo se llama la flor que solo florece a la luz de la luna llena?"
+    "¿Qué criatura mitológica tiene la capacidad de renacer de sus cenizas?"
+    "¿Cuál es el ingrediente principal para una poción de invisibilidad?"
+    "¿Cómo se llama el libro mágico que contiene todos los hechizos conocidos?"
+)
+
+opciones=(
+    "1) Mandrágora\n2) Polvo de hadas\n3) Agua de manantial"
+    "1) Lumos\n2) Nox\n3) Incendio"
+    "1) Flor de Luna\n2) Flor de Sol\n3) Flor de Estrella"
+    "1) Dragón\n2) Fénix\n3) Basilisco"
+    "1) Sangre de dragón\n2) Pelo de unicornio\n3) Hierba de sombra"
+    "1) Libro de las Sombras\n2) Grimorio\n3) Necronomicón"
+)
+
+respuestas_correctas=("3" "1" "1" "2" "3" "2")
+
+# Bucle principal del juego
+while [ "$cristales" -lt 3 ]; do
+    for i in "${!preguntas[@]}"; do
+        if [ "$cristales" -ge 3 ]; then
+            break
+        fi
+        hacer_pregunta "${preguntas[$i]}" "${opciones[$i]}" "${respuestas_correctas[$i]}"
+    done
+done
 
 # Resultado final
-echo -e "\n${CYAN}Has encontrado $cristales de 3 cristales mágicos.${NC}"
-
-if [ "$cristales" -eq 3 ]; then
-    echo -e "${GREEN}¡Felicidades! Has conseguido todos los cristales y forjado tu bastón mágico.${NC}"
-else
-    echo -e "${RED}No has conseguido todos los cristales. Tu misión aún no está completa.${NC}"
-fi
+echo -e "\n${CYAN}Has encontrado los 3 cristales mágicos.${NC}"
+echo -e "${GREEN}¡Felicidades! Has conseguido todos los cristales y forjado tu bastón mágico.${NC}"
+echo -e "$baston_magico"
